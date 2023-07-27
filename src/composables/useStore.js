@@ -29,10 +29,11 @@ async function save(data) {
 }
 
 function read() {
-  Object.assign(store, JSON.parse(localStorage.getItem(weatherKey) || store))
+  console.log(store)
+  Object.assign(store.value, JSON.parse(localStorage.getItem(weatherKey) || store.value))
 }
 
-read()
+// read()
 
 export function useStore() {
   return {

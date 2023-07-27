@@ -9,7 +9,7 @@ function formatTemp(temp) {
 }
 
 function formatDesc(feel, desc) {
-  return `Fells like ${formatTemp(feel)}. ${desc}`
+  return `Feels like ${formatTemp(feel)}. ${desc}`
 }
 
 export function useWeather() {

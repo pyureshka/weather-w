@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import Settings from './Settings.vue'
 import { useStore } from '../composables/useStore'
 import { useWeather } from '../composables/useWeather'
@@ -15,8 +15,6 @@ function getIcon(id) {
 function onSettings() {
   isSettings.value = !isSettings.value
 }
-
-onMounted(() => {})
 </script>
 <template>
   <div class="row">
@@ -33,13 +31,13 @@ onMounted(() => {})
       </q-card-section>
 
       <div v-if="isSettings">
-        <q-card-section v-for="city in store" :key="city.id">
+        <q-card-section>
           <settings />
         </q-card-section>
       </div>
 
       <div v-else>
-        <q-card-section v-for="city in store" :key="city.id">
+        <q-card-section v-for="city in store" :key="city.id" class="q-pt-none">
           <div class="text-h6">{{ formatName(city.name, city.sys.country) }}</div>
           <div class="row flex-center q-gutter-md">
             <div id="icon"><img :src="getIcon(city.weather[0].icon)" alt="Weather icon" /></div>

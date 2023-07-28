@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useStore } from '../composables/useStore'
 import { useWeather } from '../composables/useWeather'
+import draggable from 'vuedraggable'
 
 let { store } = useStore()
 let { createLocation, formatName } = useWeather()
@@ -18,21 +19,23 @@ async function onCreate() {
 </script>
 <template>
   <div class="col q-gutter-md">
-    <q-list class="q-pa-none">
-      <q-item v-for="city in store" :key="city.id" class="bg-grey-2 q-pa-xs q-mb-sm">
-        <q-item-section avatar>
-          <q-icon name="mdi-menu"></q-icon>
-        </q-item-section>
+    <draggable v-model="store" itemKey="id" :options="{ draggable: 'q-list' }">
+      <template #item="{ element: city }">
+        <q-item class="bg-grey-2 q-pa-xs q-mb-sm">
+          <q-item-section avatar>
+            <q-icon name="mdi-menu" class="handle" style="cursor: move"></q-icon>
+          </q-item-section>
 
-        <q-item-section>
-          <q-item-label>{{ formatName(city.name, city.sys.country) }}</q-item-label>
-        </q-item-section>
+          <q-item-section>
+            <q-item-label>{{ formatName(city.name, city.sys.country) }}</q-item-label>
+          </q-item-section>
 
-        <q-item-section side>
-          <q-btn icon="mdi-delete" @click="onDelete(city)" round dense flat></q-btn>
-        </q-item-section>
-      </q-item>
-    </q-list>
+          <q-item-section side>
+            <q-btn icon="mdi-delete" @click="onDelete(city)" round dense flat></q-btn>
+          </q-item-section>
+        </q-item>
+      </template>
+    </draggable>
 
     <q-input v-model="cityName" dense outlined rounded label="New location">
       <template v-slot:after>

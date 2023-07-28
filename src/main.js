@@ -1,7 +1,6 @@
 import { createApp } from 'vue'
 import { Quasar } from 'quasar'
 
-// Import icon libraries
 import '@quasar/extras/mdi-v7/mdi-v7.css'
 import 'quasar/src/css/index.sass'
 

@@ -1,5 +1,5 @@
 import { ref, watch } from 'vue'
-import { getWeatherByCord } from '../services/weather.service'
+import { getWeatherByCord, getWeatherByCity } from '../services/weather.service'
 
 const weatherKey = 'weather'
 
@@ -28,15 +28,15 @@ async function save(data) {
   localStorage.setItem(weatherKey, JSON.stringify(data.value))
 }
 
-function read() {
-  console.log(store)
-  Object.assign(store.value, JSON.parse(localStorage.getItem(weatherKey) || store.value))
-}
+async function updateStore() {
+  const newStore = await Promise.all(store.value.map(async (el) => await getWeatherByCity(el.name)))
 
-// read()
+  Object.assign(store.value, newStore || store.value)
+}
 
 export function useStore() {
   return {
-    store
+    store,
+    updateStore
   }
 }

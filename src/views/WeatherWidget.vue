@@ -1,12 +1,18 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import Settings from './Settings.vue'
 import { useStore } from '../composables/useStore'
 import { useWeather } from '../composables/useWeather'
 
-let { store } = useStore()
+let { store, updateStore } = useStore()
 let isSettings = ref(false)
 let { formatName, formatDesc, formatTemp } = useWeather()
+
+let timer = ref(null)
+
+async function onUpdate() {
+  updateStore()
+}
 
 function getIcon(id) {
   return `https://openweathermap.org/img/wn/${id}@2x.png`
@@ -15,6 +21,13 @@ function getIcon(id) {
 function onSettings() {
   isSettings.value = !isSettings.value
 }
+
+onMounted(() => {
+  onUpdate()
+  timer = setInterval(onUpdate, 60 * 1000)
+})
+
+onUnmounted(() => clearInterval(timer))
 </script>
 <template>
   <div class="row">
@@ -47,6 +60,8 @@ function onSettings() {
           <div class="row">
             {{ formatDesc(city.main.feels_like, city.weather[0].main) }}
           </div>
+
+          <div class="row"></div>
         </q-card-section>
       </div>
     </q-card>

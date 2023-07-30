@@ -1,21 +1,16 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-import Settings from './Settings.vue'
+import Settings from '../components/Settings.vue'
+import WeatherList from '../components/WeatherList.vue'
 import { useStore } from '../composables/useStore'
-import { useWeather } from '../composables/useWeather'
 
-let { store, updateStore } = useStore()
+let { updateStore } = useStore()
+
 let isSettings = ref(false)
-let { formatName, formatDesc, formatTemp } = useWeather()
-
 let timer = ref(null)
 
 async function onUpdate() {
   updateStore()
-}
-
-function getIcon(id) {
-  return `https://openweathermap.org/img/wn/${id}@2x.png`
 }
 
 function onSettings() {
@@ -31,7 +26,7 @@ onUnmounted(() => clearInterval(timer))
 </script>
 <template>
   <div class="row">
-    <q-card flat bordered class="col-4">
+    <q-card flat bordered class="col-3">
       <q-card-section class="row justify-end q-pa-xs">
         <q-btn
           @click="onSettings"
@@ -43,27 +38,13 @@ onUnmounted(() => clearInterval(timer))
         />
       </q-card-section>
 
-      <div v-if="isSettings">
-        <q-card-section>
-          <settings />
-        </q-card-section>
-      </div>
+      <q-card-section v-if="isSettings">
+        <settings />
+      </q-card-section>
 
-      <div v-else>
-        <q-card-section v-for="city in store" :key="city.id" class="q-pt-none">
-          <div class="text-h6">{{ formatName(city.name, city.sys.country) }}</div>
-          <div class="row flex-center q-gutter-md">
-            <div id="icon"><img :src="getIcon(city.weather[0].icon)" alt="Weather icon" /></div>
-            <div class="text-h2">{{ formatTemp(city.main.temp) }}</div>
-          </div>
-
-          <div class="row">
-            {{ formatDesc(city.main.feels_like, city.weather[0].main) }}
-          </div>
-
-          <div class="row"></div>
-        </q-card-section>
-      </div>
+      <q-card-section v-else class="q-gutter-y-md">
+        <weather-list></weather-list>
+      </q-card-section>
     </q-card>
   </div>
 </template>

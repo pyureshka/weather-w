@@ -1,8 +1,9 @@
 <script setup>
 import { ref } from 'vue'
+import draggable from 'vuedraggable'
+
 import { useStore } from '../composables/useStore'
 import { useWeather } from '../composables/useWeather'
-import draggable from 'vuedraggable'
 
 let { store } = useStore()
 let { createLocation, formatName } = useWeather()

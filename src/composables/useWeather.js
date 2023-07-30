@@ -22,11 +22,16 @@ async function createLocation(cityName) {
   store.value.push(city)
 }
 
+function getIcon(id) {
+  return `https://openweathermap.org/img/wn/${id}@2x.png`
+}
+
 export function useWeather() {
   return {
     formatName,
     formatDesc,
     formatTemp,
-    createLocation
+    createLocation,
+    getIcon
   }
 }
